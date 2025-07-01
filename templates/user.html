@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Надійний банк</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="shortcut icon" href="/static/src/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      Надійний банк
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/">Головна</a></li>
+        <li class="acount-wrapper">
+          <span id="ac">А</span>
+          <div class="pop-up" id="account">
+            <div class="pop-up-content">
+              <a onclick="document.getElementById('login-form').style.display = 'block'">Змінити обліковий запис</a>
+              <a href="/">Вийти</a>
+              <a href="/delete">Видалити акаунт</a>
+            </div>
+        </div>
+      </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="modal" id="login-form">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('login-form').style.display='none'">&times;</span>
+        <h2>Увійти</h2>
+        <form action="/load" method="post">
+          <label>Email: <input type="email" name="emaill" required/> </label>
+          <label>Пароль: <input type="number" name="passwordl" required></label>
+          <button type="submit">Увійти</button>
+        </form>
+      </div>
+    </div>
+
+  <div class="all">
+    <h1><span id="time">Доброго дня</span> {{ .Name }}</h1>
+    <h3>Ваш баланс: {{ .Balance }} грн</h3>
+    <button class="btn" onclick="document.getElementById('pay').style.display = 'block'">Поповнити рахунок</button>
+  </div>
+
+  <div class="modal" id="pay">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('pay').style.display='none'">&times;</span>
+        <h2>Відкрити рахунок</h2>
+        <form action="/pay" method="post">
+          <label>Введіть сумму: <input type="number" step="0.01" name="sum" required> грн</label>
+          <input style="display: none;" name="id" value="{{.ID}}" >
+          <button type="submit">Поповнити</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="/static/user.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Банк</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="/static/src/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      Надійний банк
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Головна</a></li>
+        <li><a href="#about">Про банк</a></li>
+        <li><button id="login-btn" onclick="document.getElementById('login-form').style.display = 'block'">Увійти</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <h1>Ваш надійний фінансовий партнер</h1>
+    <p>Ми допомагаємо керувати фінансами, створювати та примножувати капітал із максимальною безпекою та зручністю.</p>
+    <a href="#about"><button h>Відкрити рахунок</button></a>
+  </section>
+
+  <div class="modal" id="login-form">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('login-form').style.display='none'">&times;</span>
+        <h2>Увійти</h2>
+        <form action="/load" method="post">
+          <label>Email: <input type="email" name="emaill" required/> </label>
+          <label>Пароль: <input type="number" name="passwordl" required></label>
+          <button type="submit">Увійти</button>
+        </form>
+        <a id="lo" href="/load">Або Увійти в останню сессію</a>
+      </div>
+    </div>
+
+  <section class="services">
+    <div class="service-card">
+      <h3>Кредитування</h3>
+      <p>Вигідні умови та швидкі рішення для вашого бізнесу та особистих цілей.</p>
+    </div>
+    <div class="service-card">
+      <h3>Вклади</h3>
+      <p>Надійне збереження та примноження коштів із гнучкими ставками та термінами.</p>
+    </div>
+    <div class="service-card">
+      <h3>Інвестиції</h3>
+      <p>Професійні консультації та сучасні інструменти для зростання капіталу.</p>
+    </div>
+    <div class="service-card">
+      <h3>Онлайн-банкінг</h3>
+      <p>Зручний доступ до рахунків та операцій 24/7 з будь-якого пристрою.</p>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <h1>Про нас</h1>
+    <p>Ми надійний банк з досвідом <span id="exp"></span>. Ми прагнемо зробити фінанси доступними для кожного
+</p>
+    <button class="btn" onclick="document.getElementById('acount-form').style.display='block'">Відкрити рахунок</button>
+
+    <div class="modal" id="acount-form">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('acount-form').style.display='none'">&times;</span>
+        <h2>Відкрити рахунок</h2>
+        <form action="/save" method="post">
+          <label>Імʼя: <input type="text" name="name" required/> </label>
+          <label>Прізвище: <input type="text" name="surname" required/> </label>
+          <label>Вік: <input type="number" name="age" required/> </label>
+          <label>Email: <input type="text" name="email" required/> </label>
+          <label>Пароль: <input type="number" name="password" id=""></label>
+          <button type="submit">Надіслати</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+  <footer>
+    © 2025 Надійний банк - Всі права захищені<br/>
+    Телефон: <a href="tel:+380955723775">+38 (095) 572-37-75</a> | Email: <a href="mailto:p481767@gmail.com">p481767@gmail.com</a>
+  </footer>
+
+  <script src="/static/index.js"></script>
+</body>
+</html>
