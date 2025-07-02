@@ -18,9 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
   timeLabel.textContent = getTimeOfDay();
 
   const account = document.getElementById("ac");
+  const name = document.getElementById("name").textContent;
   const popUp = document.getElementById("account")
   account.addEventListener("click", () => {
     popUp.style.display = popUp.style.display === 'block' ? 'none' : 'block'
   })
+  account.textContent = name[0];
 
 });
