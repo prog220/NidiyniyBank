@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: proger
+      POSTGRES_PASSWORD: s14e88x
+      POSTGRES_DB: bank
+    ports:
+      - "5432:5432"

@@ -33,7 +33,7 @@ func init() {
 	}
 	key := os.Getenv("SESSION_KEY")
 	if key == "" {
-		panic("Error")
+		panic("SESSION_KEY environment variable is required")
 	}
 	store = sessions.NewCookieStore([]byte(key))
 }
@@ -58,7 +58,12 @@ func save(name, surname, pass, email string, age string) {
 		log.Fatal("Hashing password error")
 	}
 
-	_, err = conn.Exec(context.Background(), `INSERT INTO "user" (name, surname, age, email, password) VALUES ($1, $2, $3, $4, $5)`, name, surname, age, email, hashedPass)
+	ageInt, err := strconv.Atoi(age)
+	if err != nil {
+		log.Fatal("Invalid age")
+	}
+
+	_, err = conn.Exec(context.Background(), `INSERT INTO "user" (name, surname, age, email, password) VALUES ($1, $2, $3, $4, $5)`, name, surname, ageInt, email, hashedPass)
 	if err != nil {
 		log.Fatal("DB writing error")
 	}
@@ -148,8 +153,8 @@ func loadHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		email := r.FormValue("emaill")
-		pass := r.FormValue("passwordl")
+		email := r.FormValue("email")
+		pass := r.FormValue("password")
 
 		users := load()
 		found := false
@@ -182,6 +187,23 @@ func loadHandler(w http.ResponseWriter, r *http.Request) {
 		session.Values["email"] = user.Email
 		session.Values["password"] = user.Password
 		session.Save(r, w) // Important: save the session
+
+		// Load balance
+		conn, err := dbConnect()
+		if err != nil {
+			http.Error(w, "DB connection error", 500)
+			return
+		}
+		defer conn.Close(context.Background())
+
+		var balance float64
+		query := `SELECT balance FROM "user" WHERE id = $1;`
+		err = conn.QueryRow(context.Background(), query, user.ID).Scan(&balance)
+		if err != nil {
+			http.Error(w, "Balance getting error", 500)
+			return
+		}
+		user.Balance = balance
 	}
 
 	// Render template
@@ -226,8 +248,10 @@ func pay(sum float64, id int) {
 
 	query := `UPDATE "user" SET balance = balance + $1 WHERE id = $2;`
 
-	conn.Exec(context.Background(), query, sum, id)
-
+	_, err = conn.Exec(context.Background(), query, sum, id)
+	if err != nil {
+		log.Fatal("DB update error")
+	}
 }
 
 func payHandler(w http.ResponseWriter, r *http.Request) {
@@ -264,7 +288,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 }
 
-func handeFunc() {
+func handleFunc() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
@@ -276,10 +300,9 @@ func handeFunc() {
 	r.HandleFunc("/delete", deleteHandler)
 
 	http.Handle("/", r)
-
-	http.ListenAndServe(":8080", nil)
 }
 
 func main() {
-	handeFunc()
+	handleFunc()
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
